@@ -1,5 +1,8 @@
+from logging import root
 import requests
 import io
+import xml.etree.cElementTree as ec
+
 
 def download_wiki_dataset(wiki_title):
     """Given the wikipedia article wiki_title
@@ -16,3 +19,46 @@ def download_wiki_dataset(wiki_title):
     else:
         print('Something went wrong! ' + wiki_title + '\n' + '\n')
     file_handler.close()
+
+def get_no_revisions(wiki_xml_file):
+    tree=ec.parse(wiki_xml_file)
+    root=tree.getroot()
+    rev_count=0
+    for sub_root in root:
+        if 'page' in sub_root.tag:
+            for sub_page in sub_root:
+                if 'revision' in sub_page.tag:
+                    rev_count+=1
+    return rev_count
+
+
+#May be this method can be imporved 
+def get_latest_snapshot(wiki_xml_file):
+    tree= ec.parse(wiki_xml_file)
+    root=tree.getroot()
+    snapshot=''
+    for sub_root in root:
+        if 'page' in sub_root.tag:
+            for sub_page in sub_root:
+                if 'revision' in sub_page.tag:
+                    for sub_revision in sub_page:
+                        if 'text' in sub_revision.tag:
+                            snapshot=sub_revision.text
+    return snapshot
+
+def get_no_unique_editors(wiki_xml_file):
+    tree= ec.parse(wiki_xml_file)
+    root=tree.getroot()
+    editor_ids=[]
+    for sub_root in root:
+        if 'page' in sub_root.tag:
+            for sub_page in sub_root:
+                if 'revision' in sub_page.tag:
+                    for sub_revision in sub_page:
+                        if 'contributor' in sub_revision.tag:
+                            for sub_contributor in sub_revision:
+                                if ('ip' in sub_contributor.tag) or ('id' in sub_contributor.tag):
+                                    editor_id=sub_contributor.text
+                                    if editor_id not in editor_ids:
+                                        editor_ids.append(editor_id)
+    return len(editor_ids)
