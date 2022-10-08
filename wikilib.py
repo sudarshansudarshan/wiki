@@ -5,8 +5,7 @@ import xml.etree.cElementTree as ec
 
 
 def download_wiki_dataset(wiki_title):
-    """Given the wikipedia article wiki_title
-    download it to the current directory"""
+    """Given the wikipedia article wiki_title download it to the current directory"""
     file_handler = io.open("./"+wiki_title+'.xml', mode='w+', encoding='utf-8')
     url = 'https://en.m.wikipedia.org/w/index.php?title=Special:Export&pages=' + wiki_title + '&&history=1&action=submit'
     headers = {'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Mobile Safari/537.36'}
@@ -21,6 +20,7 @@ def download_wiki_dataset(wiki_title):
     file_handler.close()
 
 def get_no_revisions(wiki_xml_file):
+    """Given the wiki_xml_file returns number of revisions/edits"""
     tree=ec.parse(wiki_xml_file)
     root=tree.getroot()
     rev_count=0
@@ -34,6 +34,7 @@ def get_no_revisions(wiki_xml_file):
 
 #May be this method can be imporved 
 def get_latest_snapshot(wiki_xml_file):
+    """Given the wiki_xml_file returns the latest snapshot of the wiki article"""
     tree= ec.parse(wiki_xml_file)
     root=tree.getroot()
     snapshot=''
@@ -47,6 +48,7 @@ def get_latest_snapshot(wiki_xml_file):
     return snapshot
 
 def get_no_unique_editors(wiki_xml_file):
+    """Given the wiki_xml_file returns the number of unique editors/ips who edited the article"""
     tree= ec.parse(wiki_xml_file)
     root=tree.getroot()
     editor_ids=[]
