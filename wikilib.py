@@ -1,7 +1,7 @@
-from logging import root
 import requests
 import io
 import xml.etree.cElementTree as ec
+import re
 
 
 def download_wiki_dataset(wiki_title):
@@ -64,3 +64,14 @@ def get_no_unique_editors(wiki_xml_file):
                                     if editor_id not in editor_ids:
                                         editor_ids.append(editor_id)
     return len(editor_ids)
+
+def get_no_references(snapshot):
+    """Given a snapshot of the wiki page returns the number of references in the snapshot"""
+    """Observations:
+        1) Referencing something once they use '<ref>"something"</ref>"
+        2) When they need to use a single reference multiple times they name it and reference it this way first time '<ref name="something">"something"</ref>' and this way from second time '<ref name="something" />'"""
+    pattern='<\/ref>'
+    count=0
+    for _ in re.finditer(pattern, snapshot):
+        count+=1
+    return count
