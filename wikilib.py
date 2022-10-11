@@ -75,3 +75,22 @@ def get_no_references(snapshot):
     for _ in re.finditer(pattern, snapshot):
         count+=1
     return count
+
+def get_wiki_article_json(article_name):
+    """ This code is copied from stack overflow : https://stackoverflow.com/questions/45193005/download-entire-history-of-a-wikipedia-page
+    This creates several json files in the current directory. Each json file
+    corresponds to a revision history. I have checked this for a couple of
+    cities and it is working fine. It is also very fast - Sudarshan"""
+    import mwclient
+    import json
+    import time
+
+    site = mwclient.Site('en.wikipedia.org')
+    page = site.pages[article_name]
+
+    for i, (info, content) in enumerate(zip(page.revisions(), page.revisions(prop='content'))):
+        info['timestamp'] = time.strftime("%Y-%m-%dT%H:%M:%S", info['timestamp'])
+        print(i, info['timestamp'])
+        open("%s.json" % info['timestamp'], "w").write(json.dumps(
+            { 'info': info,
+                'content': content}, indent=4))
