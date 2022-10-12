@@ -38,6 +38,11 @@ def get_latest_snapshot(wiki_xml_file):
     tree= ec.parse(wiki_xml_file)
     root=tree.getroot()
     snapshot=''
+    try:
+        return root[1][-1][-2].text
+    except:
+        return ''
+    
     for sub_root in root:
         if 'page' in sub_root.tag:
             for sub_page in sub_root:
