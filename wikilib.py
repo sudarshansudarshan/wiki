@@ -23,6 +23,7 @@ def get_no_revisions(wiki_xml_file):
     """Given the wiki_xml_file returns number of revisions/edits"""
     tree=ec.parse(wiki_xml_file)
     root=tree.getroot()
+    return (len(root[1])-3)
     rev_count=0
     for sub_root in root:
         if 'page' in sub_root.tag:
