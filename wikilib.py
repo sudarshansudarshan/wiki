@@ -1,7 +1,10 @@
-import requests
 import io
-import xml.etree.cElementTree as ec
+import json
+import mwclient
 import re
+import requests
+import time
+import xml.etree.cElementTree as ec
 
 
 def download_wiki_dataset(wiki_title):
@@ -23,6 +26,7 @@ def get_no_revisions(wiki_xml_file):
     """Given the wiki_xml_file returns number of revisions/edits"""
     tree=ec.parse(wiki_xml_file)
     root=tree.getroot()
+    return (len(root[1])-3)
     rev_count=0
     for sub_root in root:
         if 'page' in sub_root.tag:
@@ -38,6 +42,11 @@ def get_latest_snapshot(wiki_xml_file):
     tree= ec.parse(wiki_xml_file)
     root=tree.getroot()
     snapshot=''
+    try:
+        return root[1][-1][-2].text
+    except:
+        return ''
+    
     for sub_root in root:
         if 'page' in sub_root.tag:
             for sub_page in sub_root:
