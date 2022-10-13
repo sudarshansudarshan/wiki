@@ -1,7 +1,10 @@
-import requests
 import io
-import xml.etree.cElementTree as ec
+import json
+import mwclient
 import re
+import requests
+import time
+import xml.etree.cElementTree as ec
 
 
 def download_wiki_dataset(wiki_title):
