@@ -1,3 +1,4 @@
 .vscode
 *.xml
+*.json
 __pycache__/
