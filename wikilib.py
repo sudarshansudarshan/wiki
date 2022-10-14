@@ -91,6 +91,6 @@ def get_wiki_article_json(article_name):
     for i, (info, content) in enumerate(zip(page.revisions(), page.revisions(prop='content'))):
         info['timestamp'] = time.strftime("%Y-%m-%dT%H:%M:%S", info['timestamp'])
         print(i, info['timestamp'])
-        open("%s.json" % info['timestamp'], "w").write(json.dumps(
+        open("%s.json" % info['timestamp'].replace(':','_'), "w").write(json.dumps(
             { 'info': info,
                 'content': content}, indent=4))
