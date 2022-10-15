@@ -1,4 +1,5 @@
 import io
+import os
 import json
 import mwclient
 import re
@@ -26,7 +27,7 @@ def get_no_revisions(wiki_xml_file):
     """Given the wiki_xml_file returns number of revisions/edits"""
     tree=ec.parse(wiki_xml_file)
     root=tree.getroot()
-    return (len(root[1])-3)
+    return (len(root[1])-3) #not sure if this is the right approach as we may potentially encounter other types of pages/tags @akhil - Jayanth
     rev_count=0
     for sub_root in root:
         if 'page' in sub_root.tag:
@@ -79,7 +80,7 @@ def get_no_references(snapshot):
     """Observations:
         1) Referencing something once they use '<ref>"something"</ref>"
         2) When they need to use a single reference multiple times they name it and reference it this way first time '<ref name="something">"something"</ref>' and this way from second time '<ref name="something" />'"""
-    pattern='<\/ref>'
+    pattern='</ref>'
     count=0
     for _ in re.finditer(pattern, snapshot):
         count+=1
@@ -90,16 +91,25 @@ def get_wiki_article_json(article_name):
     This creates several json files in the current directory. Each json file
     corresponds to a revision history. I have checked this for a couple of
     cities and it is working fine. It is also very fast - Sudarshan"""
-    import mwclient
-    import json
-    import time
 
+    base_path=os.getcwd()
     site = mwclient.Site('en.wikipedia.org')
     page = site.pages[article_name]
-
+    os.mkdir(article_name)
+    os.chdir(article_name)
     for i, (info, content) in enumerate(zip(page.revisions(), page.revisions(prop='content'))):
         info['timestamp'] = time.strftime("%Y-%m-%dT%H:%M:%S", info['timestamp'])
         print(i, info['timestamp'])
         open("%s.json" % info['timestamp'].replace(':','_'), "w").write(json.dumps(
             { 'info': info,
                 'content': content}, indent=4))
+    os.chdir(base_path)
+
+def get_table(snapshot):
+    regex_expression="{ ?\| ?class=.wikitable[{}()\w\s!=\"':+-—|]*\|}"
+    pattern=re.findall(regex_expression,snapshot)
+    count=0
+    for table in pattern:
+        print(table)
+        count+=1
+    print(count)
