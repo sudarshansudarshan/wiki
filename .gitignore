@@ -2,3 +2,5 @@
 *.xml
 __pycache__/
 *.json
+*.swp
+!Rupnagar.json
