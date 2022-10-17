@@ -96,7 +96,11 @@ def get_wiki_article_json(article_name):
     base_path=os.getcwd()
     site = mwclient.Site('en.wikipedia.org')
     page = site.pages[article_name]
-    os.mkdir(article_name)
+    try:
+        os.mkdir(article_name)
+    except FileExistsError:
+        print('The directory already exisits please check')
+        return
     os.chdir(article_name)
     for i, (info, content) in enumerate(zip(page.revisions(), page.revisions(prop='content'))):
         info['timestamp'] = time.strftime("%Y-%m-%dT%H:%M:%S", info['timestamp'])
