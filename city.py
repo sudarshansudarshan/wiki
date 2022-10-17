@@ -36,6 +36,27 @@ def extract_timeseries_propernouns(article_name):
     2) Read the json file, one revision at a time and populate the triple as
     stated above: Nivedita/Shahid.
     """
+    filename=article_name+".json"
+    f= open(filename)
+    data= json.load(f)
+    fmt = '%Y-%m-%dT%H:%M:%S'
+    time1='2001-01-01T00:00:00'
+    timestep=0
+    L=[]
+    k= data.keys()
+    for key in k:
+      #timestep= data[key]["info"]["revid"]
+      timestep+=1
+      time= data[key]["info"]["timestamp"]
+      tstamp = str(datetime.strptime(time, fmt))
+      #print(tstamp)
+      text=data[key]["content"]["*"]
+      current_propernouns= propernouns(text)
+      t= (tstamp, timestep, len(current_propernouns))
+      L.append(t)
+
+    #print(L)
+    return L
 
 def propernouns(s):
     """
