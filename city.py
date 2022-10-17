@@ -15,7 +15,22 @@ the partition of this region for the first time in the documented history
 (There are a total of 7 proper nouns in the above paragraph.) 
 """
 
+def extract_timeseries_propernouns(article_name):
+    """
+    Given an article_name, let us say _India_, we need to extract all the
+    proper nouns across the revision history of the given article and return a
+    list in the form: [(time,timestep,no_propernouns),...]. Where time is the
+    date/time of revision, timestep represents the
+    revision history number and the no_propernouns is the total number of
+    proper nouns added in that revision history.
+    """
 
-
-
-
+def no_of_propernouns(s):
+    """
+    Given a string s, return the proper nouns as a set
+    """
+def master_json(article_name):
+    """
+    Given the article_name create a master json file containing all the
+    revisions. Include more details on this docstring.
+    """
