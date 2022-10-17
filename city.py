@@ -14,6 +14,8 @@ the partition of this region for the first time in the documented history
 
 (There are a total of 7 proper nouns in the above paragraph.) 
 """
+import spacy
+nlp = spacy.load("en_core_web_sm")
 
 def list_of_articles(L):
     """
@@ -39,6 +41,11 @@ def no_of_propernouns(s):
     """
     Given a string s, return the proper nouns as a set
     """
+    doc = nlp(s)
+	count = 0
+	for tok in doc:
+    		if tok.pos_ == "PROPN":
+			count += 1
 def master_json(article_name):
     """
     Given the article_name create a master json file containing all the
