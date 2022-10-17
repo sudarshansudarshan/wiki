@@ -42,10 +42,12 @@ def no_of_propernouns(s):
     Given a string s, return the proper nouns as a set
     """
     doc = nlp(s)
-	count = 0
-	for tok in doc:
-    		if tok.pos_ == "PROPN":
-			count += 1
+    count = 0
+    for tok in doc:
+        if tok.pos_ == "PROPN":
+            count += 1
+    return count
+
 def master_json(article_name):
     """
     Given the article_name create a master json file containing all the
