@@ -37,7 +37,7 @@ def extract_timeseries_propernouns(article_name):
     stated above: Nivedita/Shahid.
     """
 
-def no_of_propernouns(s):
+def propernouns(s):
     """
     Given a string s, return the proper nouns as a set
     """
