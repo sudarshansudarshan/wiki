@@ -15,6 +15,12 @@ the partition of this region for the first time in the documented history
 (There are a total of 7 proper nouns in the above paragraph.) 
 """
 
+def list_of_articles(L):
+    """
+
+
+    """
+
 def extract_timeseries_propernouns(article_name):
     """
     Given an article_name, let us say _India_, we need to extract all the
@@ -23,6 +29,10 @@ def extract_timeseries_propernouns(article_name):
     date/time of revision, timestep represents the
     revision history number and the no_propernouns is the total number of
     proper nouns added in that revision history.
+    List of tasks:
+    1) Download the master json file: Jayant
+    2) Read the json file, one revision at a time and populate the triple as
+    stated above: Nivedita/Shahid.
     """
 
 def no_of_propernouns(s):
