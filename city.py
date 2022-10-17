@@ -43,7 +43,7 @@ def propernouns(s):
     """
     doc = nlp(s)
     pronouns = set()
-	for tok in doc:
+    for tok in doc:
     	if tok.pos_ == "PROPN":
 		    pronouns.add(tok)
     return pronouns
