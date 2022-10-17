@@ -29,13 +29,6 @@ def get_no_revisions(wiki_xml_file):
     tree=ec.parse(wiki_xml_file)
     root=tree.getroot()
     return (len(root[1])-3) #not sure if this is the right approach as we may potentially encounter other types of pages/tags @akhil - Jayanth
-    rev_count=0
-    for sub_root in root:
-        if 'page' in sub_root.tag:
-            for sub_page in sub_root:
-                if 'revision' in sub_page.tag:
-                    rev_count+=1
-    return rev_count
 
 
 #May be this method can be imporved 
@@ -43,20 +36,10 @@ def get_latest_snapshot(wiki_xml_file):
     """Given the wiki_xml_file returns the latest snapshot of the wiki article"""
     tree= ec.parse(wiki_xml_file)
     root=tree.getroot()
-    snapshot=''
     try:
         return root[1][-1][-2].text
     except:
         return ''
-    
-    for sub_root in root:
-        if 'page' in sub_root.tag:
-            for sub_page in sub_root:
-                if 'revision' in sub_page.tag:
-                    for sub_revision in sub_page:
-                        if 'text' in sub_revision.tag:
-                            snapshot=sub_revision.text
-    return snapshot
 
 def get_no_unique_editors(wiki_xml_file):
     """Given the wiki_xml_file returns the number of unique editors/ips who edited the article"""
@@ -111,6 +94,10 @@ def get_wiki_article_json(article_name):
     os.chdir(base_path)
 
 def get_table(snapshot):
+    """
+    This function returns a list of strings which are tables in the wikiarticle
+    Note that the function is not complete and may not return the correct data everytime
+    """
     regex_expression="{ ?\| ?class=.wikitable[{}()\w\s!=\"':+-—|]*\|}"
     pattern=re.findall(regex_expression,snapshot)
     count=0
@@ -118,3 +105,9 @@ def get_table(snapshot):
         print(table)
         count+=1
     print(count)
+
+def get_info_box(snapshot):
+    """The function returns the infobox of a wikiarticle as a dictionary"""
+
+def get_out_going_links(snapshot):
+    """The function returns the list of wiki articles mentioned in the wikiarticle"""

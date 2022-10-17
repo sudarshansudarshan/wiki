@@ -15,9 +15,11 @@ the partition of this region for the first time in the documented history
 (There are a total of 7 proper nouns in the above paragraph.) 
 """
 import spacy
+import json
+import datetime
 nlp = spacy.load("en_core_web_sm")
 
-def list_of_articles(L):
+def list_of_articles(article_list):
     """
 
 
@@ -40,7 +42,6 @@ def extract_timeseries_propernouns(article_name):
     f= open(filename)
     data= json.load(f)
     fmt = '%Y-%m-%dT%H:%M:%S'
-    time1='2001-01-01T00:00:00'
     timestep=0
     L=[]
     k= data.keys()
