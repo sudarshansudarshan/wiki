@@ -15,7 +15,7 @@ the partition of this region for the first time in the documented history
 (There are a total of 7 proper nouns in the above paragraph.) 
 """
 import spacy
-nlp = spacy.load("en_core_web_trf")
+nlp = spacy.load("en_core_web_sm")
 
 def list_of_articles(L):
     """
@@ -62,7 +62,7 @@ def master_json(article_name):
     master_json= open("%s.json"%article_name,'w')
     master_json.write('{\n')
     os.chdir(article_name)
-    json_list=os.listdir()
+    json_list=os.listdir()  #not sure if this will return file_list in ascending order
     for idx in range(len(json_list)):
         json_file=json_list[idx]
         f=open(json_file,'r')
