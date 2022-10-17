@@ -17,6 +17,12 @@ the partition of this region for the first time in the documented history
 import spacy
 nlp = spacy.load("en_core_web_sm")
 
+def list_of_articles(L):
+    """
+
+
+    """
+
 def extract_timeseries_propernouns(article_name):
     """
     Given an article_name, let us say _India_, we need to extract all the
@@ -25,17 +31,23 @@ def extract_timeseries_propernouns(article_name):
     date/time of revision, timestep represents the
     revision history number and the no_propernouns is the total number of
     proper nouns added in that revision history.
+    List of tasks:
+    1) Download the master json file: Jayant
+    2) Read the json file, one revision at a time and populate the triple as
+    stated above: Nivedita/Shahid.
     """
 
-def no_of_propernouns(s):
+def propernouns(s):
     """
     Given a string s, return the proper nouns as a set
     """
     doc = nlp(s)
-	count = 0
-	for tok in doc:
-    		if tok.pos_ == "PROPN":
-			count += 1
+    count = 0
+    for tok in doc:
+        if tok.pos_ == "PROPN":
+            count += 1
+    return count
+
 def master_json(article_name):
     """
     Given the article_name create a master json file containing all the
