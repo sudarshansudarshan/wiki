@@ -16,9 +16,11 @@ the partition of this region for the first time in the documented history
 """
 from math import log, exp
 import spacy
-nlp = spacy.load("en_core_web_trf")
+import json
+import datetime
+nlp = spacy.load("en_core_web_sm")
 
-def list_of_articles(L):
+def list_of_articles(article_list):
     """
 
 
@@ -37,6 +39,26 @@ def extract_timeseries_propernouns(article_name):
     2) Read the json file, one revision at a time and populate the triple as
     stated above: Nivedita/Shahid.
     """
+    filename=article_name+".json"
+    f= open(filename)
+    data= json.load(f)
+    fmt = '%Y-%m-%dT%H:%M:%S'
+    timestep=0
+    L=[]
+    k= data.keys()
+    for key in k:
+      #timestep= data[key]["info"]["revid"]
+      timestep+=1
+      time= data[key]["info"]["timestamp"]
+      tstamp = str(datetime.strptime(time, fmt))
+      #print(tstamp)
+      text=data[key]["content"]["*"]
+      current_propernouns= propernouns(text)
+      t= (tstamp, timestep, len(current_propernouns))
+      L.append(t)
+
+    #print(L)
+    return L
 
 def get_upper_limit(data):
     """
@@ -60,7 +82,7 @@ def propernouns(s):
     """
     doc = nlp(s)
     pronouns = set()
-	for tok in doc:
+    for tok in doc:
         if tok.pos_ == "PROPN":
             pronouns.add(tok)
     return pronouns
@@ -70,3 +92,27 @@ def master_json(article_name):
     Given the article_name create a master json file containing all the
     revisions. Include more details on this docstring.
     """
+
+    from wikilib import get_wiki_article_json
+    import os
+    import shutil
+    base_path=os.getcwd()
+    get_wiki_article_json(article_name)
+    master_json= open("%s.json"%article_name,'w')
+    master_json.write('{\n')
+    os.chdir(article_name)
+    json_list=os.listdir()  #not sure if this will return file_list in ascending order
+    for idx in range(len(json_list)):
+        json_file=json_list[idx]
+        f=open(json_file,'r')
+        json_file=json_file.replace('.json','')
+        master_json.write('"%s":'%json_file)
+        master_json.write(f.read())
+        f.close()
+        if idx==len(json_list)-1:
+            continue
+        master_json.write(',')
+    master_json.write('}')
+    os.chdir(base_path)
+    shutil.rmtree(article_name)
+    master_json.close()
