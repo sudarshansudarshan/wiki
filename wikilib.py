@@ -6,6 +6,7 @@ import re
 import requests
 import time
 import xml.etree.cElementTree as ec
+import wikitextparser as wtp
 
 
 def download_wiki_dataset(wiki_title):
@@ -38,7 +39,7 @@ def get_latest_snapshot(wiki_xml_file):
     root=tree.getroot()
     try:
         return root[1][-1][-2].text
-    except:
+    except IndexError:
         return ''
 
 def get_no_unique_editors(wiki_xml_file):
@@ -95,19 +96,20 @@ def get_wiki_article_json(article_name):
 
 def get_table(snapshot):
     """
-    This function returns a list of strings which are tables in the wikiarticle
-    Note that the function is not complete and may not return the correct data everytime
+    This function returns a list of tables which are tables in the wikiarticle
     """
-    regex_expression="{ ?\| ?class=.wikitable[{}()\w\s!=\"':+-—|]*\|}"
-    pattern=re.findall(regex_expression,snapshot)
-    count=0
-    for table in pattern:
-        print(table)
-        count+=1
-    print(count)
+    parsed=wtp.parse(snapshot)
+    tables=[table.data() for table in parsed.tables]
+    return tables
+    
 
 def get_info_box(snapshot):
     """The function returns the infobox of a wikiarticle as a dictionary"""
 
 def get_out_going_links(snapshot):
     """The function returns the list of wiki articles mentioned in the wikiarticle"""
+    parsed=wtp.parse(snapshot)
+    out_links=[]
+    for link in parsed.wikilinks:
+        out_links.append(link.target)
+    return out_links
