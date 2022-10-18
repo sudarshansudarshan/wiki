@@ -14,6 +14,7 @@ the partition of this region for the first time in the documented history
 
 (There are a total of 7 proper nouns in the above paragraph.) 
 """
+from math import log, exp
 import spacy
 nlp = spacy.load("en_core_web_trf")
 
@@ -36,6 +37,22 @@ def extract_timeseries_propernouns(article_name):
     2) Read the json file, one revision at a time and populate the triple as
     stated above: Nivedita/Shahid.
     """
+
+def get_upper_limit(data):
+    """
+    Let ae^(bx) is graph of data, log of this will be log(a) +bx.
+    here a is obviously positive.
+    """
+    x = []
+    y = []
+
+    for i in data:
+        x.append(i[0])
+        y.append(log(i[1]))
+
+    z = np.polyfit(x, y, 1)
+
+    return exp(z[1])
 
 def propernouns(s):
     """
