@@ -46,7 +46,7 @@ def get_no_unique_editors(wiki_xml_file):
     """Given the wiki_xml_file returns the number of unique editors/ips who edited the article"""
     tree= ec.parse(wiki_xml_file)
     root=tree.getroot()
-    editor_ids=[]
+    editor_ids=set()
     for sub_root in root:
         if 'page' in sub_root.tag:
             for sub_page in sub_root:
@@ -56,8 +56,7 @@ def get_no_unique_editors(wiki_xml_file):
                             for sub_contributor in sub_revision:
                                 if ('ip' in sub_contributor.tag) or ('id' in sub_contributor.tag):
                                     editor_id=sub_contributor.text
-                                    if editor_id not in editor_ids:
-                                        editor_ids.append(editor_id)
+                                    editor_ids.add(editor_id)
     return len(editor_ids)
 
 def get_no_references(snapshot):
@@ -105,6 +104,58 @@ def get_table(snapshot):
 
 def get_info_box(snapshot):
     """The function returns the infobox of a wikiarticle as a dictionary"""
+    pattern="\{\{Infobox"
+    k=re.search(pattern, snapshot)
+    idx=k.span()[0]+2
+    string=""
+    stac=['{','{']
+    while stac:
+        char=snapshot[idx]
+        string+=char
+        if char in ['}',']',')']:
+            stac.pop()
+        if char in ['{','[','(']:
+            stac.append(char)
+        idx+=1
+    string=string[:-2]
+    return get_dict_from_string(string)
+
+def get_dict_from_string(string):
+    """Given a string of the form 'k\n|a=b\n|c=d\n|....' return a dictionary D={a:b,c:d....}"""
+    line=""
+    stack=[]
+    stack_string=''
+    box=dict()
+    for char in string:
+        if char in '{[':
+            stack.append(char)
+        if char in '}]':
+            stack.pop()
+            if stack==[]:
+                stack_string+=char
+        if char =='|' and stack==[]:
+            if '=' not in line:
+                line=''
+                continue
+            if not stack_string:
+                a,b=line.split('=')
+                a=re.sub('(^\s*| \s+|\s*$| ?\n)','',a)
+                b=re.sub('(^\s*|\s*$| \s+| ?\n)','',b)
+                box[a]=b
+            if stack_string:
+                idx=line.find('=')
+                a=line[:idx]
+                a=re.sub('(^\s*| \s+|\s*$| ?\n)','',a)
+                b=line[idx+2:]
+                b=re.sub('(^\s*|\s*$| \s+| ?\n)','',b)
+                box[a]=b
+            line=''
+            stack_string=''
+            continue
+        line+=char
+        if stack:
+            stack_string+=char
+    return box
 
 def get_out_going_links(snapshot):
     """The function returns the list of wiki articles mentioned in the wikiarticle"""
