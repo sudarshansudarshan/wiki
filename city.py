@@ -15,6 +15,7 @@ the partition of this region for the first time in the documented history
 (There are a total of 7 proper nouns in the above paragraph.) 
 """
 from math import log, exp
+import numpy as np
 import spacy
 import json
 import datetime
@@ -50,7 +51,7 @@ def extract_timeseries_propernouns(article_name):
       #timestep= data[key]["info"]["revid"]
       timestep+=1
       time= data[key]["info"]["timestamp"]
-      tstamp = str(datetime.strptime(time, fmt))
+      tstamp = str(datetime.datetime.strptime(time, fmt))
       #print(tstamp)
       text=data[key]["content"]["*"]
       current_propernouns= propernouns(text)
@@ -84,7 +85,7 @@ def propernouns(s):
     pronouns = set()
     for tok in doc:
         if tok.pos_ == "PROPN":
-            pronouns.add(tok)
+            pronouns.add(tok.text)
     return pronouns
 
 def master_json(article_name):
