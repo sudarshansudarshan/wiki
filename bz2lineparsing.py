@@ -1,4 +1,6 @@
 import bz2, time
+import pdb
+pdb.set_trace()
 t0 = time.time()
 i = 0
 s = b''

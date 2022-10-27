@@ -4,3 +4,4 @@ __pycache__/
 *.json
 *.swp
 *.bz2
+*.txt
