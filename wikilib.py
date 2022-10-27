@@ -1,3 +1,4 @@
+import random
 import io
 import os
 import json
@@ -164,3 +165,12 @@ def get_out_going_links(snapshot):
     for link in parsed.wikilinks:
         out_links.append(link.target)
     return out_links
+
+def Create_Dummy_Bigfile(k):
+    """This will create a file with k lines"""
+    f=open('dummy.txt','a+')
+    for i in range(k):
+        f.write(str(random.random()))
+        f.write('\n')
+    f.close()
+
