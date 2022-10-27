@@ -1,4 +1,4 @@
-import bz2, time, nltk
+import bz2, time, nltk,os
 import pdb
 pdb.set_trace()
 
@@ -26,27 +26,32 @@ def exp():
     """Takes all words in the file and displays it. The buffer size is n"""
     Words=list(nltk.corpus.words.words())
     Words=set(Words)
-    n=200*(1000**2)
+    n=(1000**2)*10
     counter=0
     S=set([])
-    with bz2.open('../enwiki-latest-pages-articles.xml.bz2','rb') as f:
+    with open('wiki.xml','r') as f:
         while True:
             g=open('all_words.txt','a')
             counter=counter+1
-            print((counter),"%")
+            #print((n*counter),"Mb")
+            os.system('sleep 1')
             s=f.read(n)
-            L=s.split(b' ')
+            L=s.split(' ')
             #print(L)
-            if not L:
+            if (not L) or (len(L)==1 and L[0]==''):
                 break
             for i in range(len(L)):
                 x=str(L[i])
-                y=x[2:-1]
+                y=x
                 if y in Words and y not in S:
-                    print(i,len(L),y)
+                    #print(i,len(L),y)
                     S.add(y)
                     g.write(y+'\n')
             g.close() 
 
+t1=time.time()
+
 exp()
 
+t2=time.time()
+print(t2-t1,"seconds")
