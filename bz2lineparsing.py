@@ -48,6 +48,34 @@ def exp():
                     S.add(y)
                     g.write(y+'\n')
             g.close() 
+            
+            
+def get_city_articleid():
+  import requests
+  import csv
+
+  page_titles = ['Mumbai', 'Indore']
+
+  for each in page_titles:
+    url = (
+        'https://en.wikipedia.org/w/api.php'
+        '?action=query'
+        '&prop=info'
+        '&inprop=subjectid'
+        '&titles=' + '|'.join(each) +
+        '&format=json')
+    json_response = requests.get(url).json()
+
+    title_to_page_id  = {
+        page_info['title']: page_id
+        for page_id, page_info in json_response['query']['pages'].items()}
+
+    x=title_to_page_id
+    print(title_to_page_id)
+    with open('cities_articles_id.csv', 'w+') as f:
+        for key in x.keys():
+            f.write("%s, %s\n" % (key, x[key]))
+        f.close()
 
 t1=time.time()
 
