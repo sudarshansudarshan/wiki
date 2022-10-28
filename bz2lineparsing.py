@@ -29,7 +29,7 @@ def exp():
     n=(1000**2)*10
     counter=0
     S=set([])
-    with open('wiki.xml','r') as f:
+    with open('/Users/sudarshaniyengar/Desktop/all_articles/enwiki-latest-pages-articles.xml','r') as f:
         while True:
             g=open('all_words.txt','a')
             counter=counter+1
