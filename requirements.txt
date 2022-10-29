@@ -1,3 +1,4 @@
 wikitextparser==0.51.1
 mwclient==0.10.1
 spacy==3.2.4
+nltk==3.7
