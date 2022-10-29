@@ -29,7 +29,7 @@ def exp():
     n=(1000**2)*10
     counter=0
     S=set([])
-    with open('/Users/sudarshaniyengar/Desktop/all_articles/enwiki-latest-pages-articles.xml','r') as f:
+    with open('enwiki-latest-pages-articles.xml','r') as f:
         while True:
             g=open('all_words.txt','a')
             counter=counter+1
@@ -51,18 +51,16 @@ def exp():
             
             
 def get_city_articleid():
-  import requests
-  import csv
+    import requests
+    import csv
 
-  page_titles = ['Mumbai', 'Indore']
-
-  for each in page_titles:
+    page_titles = ['Mumbai', 'Indore', 'Hyderabad', 'Delhi', 'Chennai', 'Bhopal']
     url = (
         'https://en.wikipedia.org/w/api.php'
         '?action=query'
         '&prop=info'
         '&inprop=subjectid'
-        '&titles=' + '|'.join(each) +
+        '&titles=' + '|'.join(page_titles) +
         '&format=json')
     json_response = requests.get(url).json()
 
@@ -77,9 +75,9 @@ def get_city_articleid():
             f.write("%s, %s\n" % (key, x[key]))
         f.close()
 
-t1=time.time()
+# t1=time.time()
 
-exp()
+# exp()
 
-t2=time.time()
-print(t2-t1,"seconds")
+# t2=time.time()
+# print(t2-t1,"seconds")
